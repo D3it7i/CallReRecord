@@ -1,4 +1,4 @@
-package io.github.vvb2060.callrecording.xposed;
+package io.github.d3it7i.callrecording.xposed;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
