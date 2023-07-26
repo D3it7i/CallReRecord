@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Objects;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -44,25 +43,6 @@ public class Init implements IXposedHookLoadPackage {
             });
         } catch (NoSuchMethodException e) {
             Log.e(TAG, "dispatchOnInit method not found", e);
-        }
-    }
-
-    private static void hookIsLanguageAvailable() {
-        try {
-            Method isLanguageAvailable = TextToSpeech.class.getDeclaredMethod("isLanguageAvailable", Locale.class);
-            XposedBridge.hookMethod(isLanguageAvailable, new XC_MethodHook() {
-                @Override
-                protected void afterHookedMethod(MethodHookParam param) {
-                    Log.d(TAG, "isLanguageAvailable: " + Arrays.toString(param.args) +
-                            " -> " + param.getResult());
-                    if ((int) param.getResult() < TextToSpeech.LANG_AVAILABLE) {
-                        param.setResult(TextToSpeech.LANG_COUNTRY_VAR_AVAILABLE);
-                        Log.w(TAG, "TTS language not available, ignore");
-                    }
-                }
-            });
-        } catch (NoSuchMethodException e) {
-            Log.e(TAG, "isLanguageAvailable method not found", e);
         }
     }
 
@@ -129,7 +109,6 @@ public class Init implements IXposedHookLoadPackage {
         new Thread(() -> {
             hookSynthesizeToFile();
             hookDispatchOnInit();
-            //hookIsLanguageAvailable();
         }).start();
         Log.d(TAG, "handleLoadPackage done");
     }
