@@ -55,7 +55,7 @@ public class Init implements IXposedHookLoadPackage {
                 protected void beforeHookedMethod(MethodHookParam param) {
                     Log.d(TAG, "synthesizeToFile: " + Arrays.toString(param.args));
                     // Slient TTS word
-                    //param.args[0] = "";
+                    param.args[0] = "";
                 }
 
                 @Override
@@ -69,10 +69,12 @@ public class Init implements IXposedHookLoadPackage {
                     try (var out = new FileOutputStream(file)) {
                         // start voice record announcement
                         Log.d(TAG, "Hook ing TTS: " + param.args[0]);
-                        if (((String) param.args[0]).contains("being")) {
+                        if (((String) param.args[3]).contains("starting")) {
                             out.write(startwav);
-                        } else { // or is stopped
+                        } else if (((String) param.args[3]).contains("ending")) { // or is stopped
                             out.write(endingwav);
+                        } else {
+                            return;
                         }
                         param.setResult(TextToSpeech.SUCCESS);
                     } catch (IOException e) {
