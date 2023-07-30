@@ -9,4 +9,4 @@ Then you need to place your custom start and end announcements respectively, and
 * /data/data/com.google.android.dialer/files/callrecordingprompt/ending_custom.wav  
 Grant permissions to ensure that the file can be read by everyone, This is done and he will work
 # known issues
-* When repeating the recording, the custom announcement may not be used, and there is a loud noise
+* none
